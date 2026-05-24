@@ -34,9 +34,30 @@ namespace CNC.Implementation.Controls
             }
         }
 
+
         public void SetParent(Transform parent)
         {
             transform.SetParent(parent);
+        }
+
+        public void UpdateVisual(SlotLocationType slotLocationType)
+        {
+            int index = 0;
+            foreach (var toolOffset in Tool.Offsets)
+            {
+                var edge = ToolEdges[index];
+
+                var siplayType = Tool.Id <= 0 
+                    ? SlotDisplayType.Unload 
+                    : (index == 0 
+                        ? SlotDisplayType.Load 
+                        : SlotDisplayType.Edge);
+
+                edge.ApplyState(siplayType, slotLocationType);
+
+
+                index++;
+            }
         }
     }
 }

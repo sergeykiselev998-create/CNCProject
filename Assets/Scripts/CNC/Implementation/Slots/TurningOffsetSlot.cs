@@ -66,19 +66,19 @@ namespace CNC.Implementation.Slots
             m_ToolTypeDropdown.onValueChanged.RemoveAllListeners();
         }
 
-        public void ApplyState(SlotState state, SlotContext context)
+        public void ApplyState(SlotDisplayType state, SlotLocationType context)
         {
             switch (state)
             {
-                case SlotState.Load:
+                case SlotDisplayType.Load:
                     Load(m_LengthX, m_LengthZ, m_Radius, m_ToolTypeDropdown);
                     break;
 
-                case SlotState.Unload:
+                case SlotDisplayType.Unload:
                     Unload(m_LengthX, m_LengthZ, m_Radius, m_ToolTypeDropdown);
                     break;
 
-                case SlotState.Edge:
+                case SlotDisplayType.Edge:
                     Load(m_LengthX, m_LengthZ, m_Radius);
                     DisableInteraction(m_ToolTypeDropdown);
                     break;

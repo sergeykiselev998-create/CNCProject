@@ -1,6 +1,6 @@
 ﻿namespace CNC.Enums
 {
-    public enum SlotContext
+    public enum SlotLocationType
     {
         Spindle, 
         Magazine, 

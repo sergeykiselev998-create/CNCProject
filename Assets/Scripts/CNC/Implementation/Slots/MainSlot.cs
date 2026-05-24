@@ -40,24 +40,24 @@ namespace CNC.Implementation.Slots
             transform.SetSiblingIndex(siblingIndex);
         }
         
-        public void ApplyState(SlotState state, SlotContext context)
+        public void ApplyState(SlotDisplayType state, SlotLocationType context)
         {
-            bool isSpindle = context == SlotContext.Spindle;
+            bool isSpindle = context == SlotLocationType.Spindle;
 
             m_SpindleIcon.gameObject.SetActive(isSpindle);
             m_LastInteractIcon.gameObject.SetActive(isSpindle);
             
             switch (state)
             {
-                case SlotState.Load:
+                case SlotDisplayType.Load:
                     Load(m_Location, m_Edge, m_ToolName);
                     break;
 
-                case SlotState.Unload:
+                case SlotDisplayType.Unload:
                     Unload(m_Edge, m_ToolName);
                     break;
 
-                case SlotState.Edge:
+                case SlotDisplayType.Edge:
                     Unload(m_Location);
                     Load( m_Edge, m_ToolName);
                     DisableInteraction(m_ToolName);

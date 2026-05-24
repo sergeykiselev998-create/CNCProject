@@ -1,6 +1,6 @@
 ﻿namespace CNC.Enums
 {
-    public enum SlotState
+    public enum SlotDisplayType
     {
         Unload,
         Edge,

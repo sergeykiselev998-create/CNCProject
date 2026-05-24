@@ -7,7 +7,7 @@ namespace CNC.Implementation.Slots
 {
     public class FourthSlot : BaseSlotHandler, ISlotView<ITool>
     {
-        public void ApplyState(SlotState state, SlotContext context)
+        public void ApplyState(SlotDisplayType state, SlotLocationType context)
         {
         }
 

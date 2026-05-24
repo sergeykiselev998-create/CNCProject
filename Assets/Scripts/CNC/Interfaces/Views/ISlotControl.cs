@@ -10,6 +10,7 @@ namespace CNC.Interfaces.Views
         where TTool : ITool
     {
         void Initialize(int location, TTool tool, List<TContent> toolEdges);
+        void UpdateVisual(SlotLocationType slotLocationType);
         void SetParent(Transform parent);
     }
 }

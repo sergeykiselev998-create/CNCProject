@@ -66,19 +66,19 @@ namespace CNC.Implementation.Slots
             m_CoolantToggle.onValueChanged.RemoveListener(_ => onCoolantToggled?.Invoke());
         }
 
-        public void ApplyState(SlotState state, SlotContext context)
+        public void ApplyState(SlotDisplayType state, SlotLocationType context)
         {
             switch (state)
             {
-                case SlotState.Load:
+                case SlotDisplayType.Load:
                     Load(m_Length, m_Diameter, m_TipAngle, m_CoolantToggle);
                     break;
 
-                case SlotState.Unload:
+                case SlotDisplayType.Unload:
                     Unload(m_Length, m_Diameter, m_TipAngle, m_CoolantToggle);
                     break;
 
-                case SlotState.Edge:
+                case SlotDisplayType.Edge:
                     Load(m_Length, m_Diameter, m_TipAngle);
                     DisableInteraction(m_CoolantToggle);
                     break;

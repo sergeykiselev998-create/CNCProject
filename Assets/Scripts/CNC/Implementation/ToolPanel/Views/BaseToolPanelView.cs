@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using CNC.Implementation.Controls;
 using CNC.Implementation.Factories;
-using CNC.Implementation.Slots;
+using CNC.Enums;
 using CNC.Interfaces.Tool;
 using CNC.Interfaces.ToolPanel;
 using CNC.Interfaces.Views;
@@ -30,31 +30,32 @@ namespace CNC.Implementation.ToolPanel.Views
 
         public void AddToolHolder(int location, TTool tool)
         {
-            var toolControl = Create(location, tool, m_SpindleContainer.transform);
+            var toolControl = Create(location, tool, m_SpindleContainer.transform, SlotLocationType.Spindle);
             Spindle = toolControl;
         }
 
         public void AddMagazine(int location, TTool tool)
         {
-            var toolControl = Create(location, tool, m_MagazineContainer.transform);
+            var toolControl = Create(location, tool, m_MagazineContainer.transform, SlotLocationType.Magazine);
             Magazine[location] = toolControl;
         }
 
         public void AddBuffer(int location, TTool tool)
         {
-            var toolControl = Create(location, tool, m_BufferContainer.transform);
+            var toolControl = Create(location, tool, m_BufferContainer.transform, SlotLocationType.Buffer);
             
             Buffer.Add(toolControl);
         }
         
 
-        private ISlotControl<TContent, TTool> Create(int location, TTool tool, Transform parent)
+        private ISlotControl<TContent, TTool> Create(int location, TTool tool, Transform parent, SlotLocationType locationType)
         {
             var toolControl =  Factory.CreateSlotControl();
             var toolEdges = Factory.CreateEdges(tool);
             
             toolControl.SetParent(parent);
             toolControl.Initialize(location, tool, toolEdges);
+            toolControl.UpdateVisual(locationType);
             
             return toolControl;
         }
