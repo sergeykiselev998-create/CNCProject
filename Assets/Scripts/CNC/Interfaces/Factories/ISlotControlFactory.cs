@@ -10,7 +10,7 @@ namespace CNC.Interfaces.Factories
     public interface ISlotControlFactory<TControl, TContent, in TTool>
         where TControl : MonoBehaviour, ISlotControl<TContent,TTool>
         where TContent : MonoBehaviour, ISlotView<TTool>
-        where TTool : ITool
+        where TTool : IMainData
     {
         ISlotControl<TContent, TTool> CreateSlotControl(TTool tool);
     }

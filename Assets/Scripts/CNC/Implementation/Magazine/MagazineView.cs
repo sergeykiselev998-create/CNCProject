@@ -4,7 +4,7 @@ using CNC.Interfaces.Tool;
 namespace CNC.Implementation.Magazine
 {
     public class MagazineView<TTool> : IMagazineView<TTool>
-    where TTool : ITool
+    where TTool : IMainData
     {
         public IMagazineView<TTool> MainView { get; }
         public IMagazineView<TTool> OffsetView { get; }

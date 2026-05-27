@@ -4,7 +4,7 @@ using CNC.Interfaces.Tool;
 namespace CNC.Interfaces.Views
 {
     public interface ISlotView<in TTool>
-    where TTool : ITool
+    where TTool : IToolData
     {
         void ApplyState(SlotDisplayType state, SlotLocationType context);
         void UpdateData(int location, int edge, TTool tool);

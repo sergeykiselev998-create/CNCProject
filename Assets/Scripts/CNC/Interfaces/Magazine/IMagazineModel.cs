@@ -6,7 +6,7 @@ namespace CNC.Interfaces.Magazine
     /// <summary>
     /// Interface for the magazine model
     /// </summary>
-    public interface IMagazineModel<T> where T : ITool
+    public interface IMagazineModel<T> where T : IMainData
     {
         List<int> GetLocations();
         bool TryLoad(int location, int toolId);

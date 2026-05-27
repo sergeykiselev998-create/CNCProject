@@ -1,13 +1,12 @@
 ﻿using CNC.Interfaces.Buffer;
 using CNC.Interfaces.Events;
 using CNC.Interfaces.Tool;
-using CNC.Interfaces.ToolList;
 using Reflex.Attributes;
 
 namespace CNC.Implementation.Buffer
 {
     public class BufferPresenter<TTool> : IBufferPresenter<TTool>
-    where TTool : ITool
+    where TTool : IMainData
     {
         public IBufferModel<TTool> Model { get; }
         public IBufferView<TTool> View { get; }

@@ -75,6 +75,11 @@ namespace CNC.Utils
                 ? result 
                 : defaultValue;
         }
+        
+        public static bool TryParseFloat(string value, out float result)
+        {
+            return float.TryParse(value, NumberStyles.Float, FormatProvider, out result);
+        }
 
         /// <summary>
         /// Парсит строки в int с использованием InvariantCulture

@@ -9,39 +9,21 @@ namespace CNC.Implementation.Config
 {
     public class ConfigProvider : IConfigProvider
     {
-        public OffsetConfig MillingOffsetConfig { get; }
-        public OffsetConfig TurningOffsetConfig { get; }
-        public ToolConfig MillingToolConfig { get; }
-        public ToolConfig TurningToolConfig { get; }
+        public ExternalToolConfig MillingExternalToolConfig { get; }
+        public ExternalToolConfig TurningExternalToolConfig { get; }
+        
         public MagazineConfig MillingMagazineConfig { get; }
         public MagazineConfig TurningMagazineConfig { get; }
+        
+        public AdditionalToolConfig MillingAdditionalConfig { get; }
+        public AdditionalToolConfig TurningAdditionalConfig { get; }
         
         public ConfigProvider()
         {
             const string toolConfigFilePath = "D:\\STEPPER_CNC_AND_SIMULATOR_SRC\\STEPPER_2022\\Config\\";
-            var offsetFilePath = Application.streamingAssetsPath;
-            
-            MillingOffsetConfig = new OffsetConfig
-            {
-                FilePath = Path.Combine(offsetFilePath, "millingOffsets.ini"),
-                MainSection = "Main",
-                CountKey = "Count",
-                ToolSectionPrefix = "T",
-                EdgesCountKey = "EdgesCount",
-                OffsetKeyPrefix = "D"
-            };
-            
-            TurningOffsetConfig = new OffsetConfig
-            {
-                FilePath = Path.Combine(offsetFilePath, "turningOffsets.ini"),
-                MainSection = "Main",
-                CountKey = "Count",
-                ToolSectionPrefix = "T",
-                EdgesCountKey = "EdgesCount",
-                OffsetKeyPrefix = "D"
-            };
+            var streamingAssetsPath = Application.streamingAssetsPath;
 
-            MillingToolConfig = new ToolConfig
+            MillingExternalToolConfig = new ExternalToolConfig
             {
                 FilePath = Path.Combine(toolConfigFilePath, "tools.ini"),
                 MainSection = "Main",
@@ -52,7 +34,7 @@ namespace CNC.Implementation.Config
                 Param2Key = "Tool"
             };
 
-            TurningToolConfig = new ToolConfig
+            TurningExternalToolConfig = new ExternalToolConfig
             {
                 FilePath = Path.Combine(toolConfigFilePath, "tools.ini"),
                 MainSection = "Main",
@@ -77,6 +59,32 @@ namespace CNC.Implementation.Config
                 MainSection = "Main",
                 CountKey = "Count",
                 PositionKeyPrefix = "Position"
+            };
+            
+            MillingAdditionalConfig = new AdditionalToolConfig
+            {
+                FilePath = Path.Combine(streamingAssetsPath, "milling_additional.ini"),
+                MainSection = "Main",
+                CountKey = "Count",
+                OffsetDataValueCount = 2,
+                MagazineDataBoolValueCount = 3,
+                WearDataBoolValueCount = 2,
+                OffsetEdgeFloatValueCount = 3,
+                OffsetEdgeIntValueCount = 1,
+                WearEdgeFloatValueCount = 11
+            };
+
+            TurningAdditionalConfig = new AdditionalToolConfig
+            {
+                FilePath = Path.Combine(toolConfigFilePath, "turning_additional.ini"),
+                MainSection = "Main",
+                CountKey = "Count",
+                OffsetDataValueCount = 2,
+                MagazineDataBoolValueCount = 2,
+                WearDataBoolValueCount = 2,
+                OffsetEdgeFloatValueCount = 6,
+                OffsetEdgeIntValueCount = 0,
+                WearEdgeFloatValueCount = 12
             };
         }
     }

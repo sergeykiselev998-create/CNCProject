@@ -1,10 +1,11 @@
 ﻿using System;
 using CNC.Interfaces.Tool;
+using UnityEngine.Events;
 
 namespace CNC.Interfaces.ToolHolder
 {
     public interface IToolHolderModel<TTool> 
-        where TTool : ITool
+        where TTool : IMainData
     {
         /// <summary>
         /// Ссылка на текущий загруженный инструмент (объект ITool)
@@ -34,12 +35,12 @@ namespace CNC.Interfaces.ToolHolder
         /// Вызывается при успешной загрузке нового инструмента
         /// Передаёт ссылку на загруженный инструмент
         /// </summary>
-        event Action<TTool> OnToolChanged;
+        event UnityAction<TTool> OnToolChanged;
     
         /// <summary>
         /// Вызывается при выгрузке инструмента (шпиндель опустел)
         /// </summary>
-        event Action OnToolUnloaded;
+        event UnityAction OnToolUnloaded;
 
         /// <summary>
         /// Загрузить инструмент из указанного слота магазина

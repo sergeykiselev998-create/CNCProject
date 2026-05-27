@@ -7,10 +7,11 @@ namespace CNC.Interfaces.Views
 {
     public interface ISlotControl<TContent, in TTool>
         where TContent : MonoBehaviour, ISlotView<TTool>
-        where TTool : ITool
+        where TTool : IMainData
     {
         void Initialize(int location, TTool tool, List<TContent> toolEdges);
         void UpdateVisual(SlotLocationType slotLocationType);
         void SetParent(Transform parent);
+        int Id { get; }
     }
 }

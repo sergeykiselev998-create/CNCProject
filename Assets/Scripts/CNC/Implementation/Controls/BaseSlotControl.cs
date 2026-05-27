@@ -8,31 +8,37 @@ namespace CNC.Implementation.Controls
 {
     public abstract class BaseSlotControl<TContent, TTool> : MonoBehaviour, ISlotControl<TContent, TTool>
         where TContent : MonoBehaviour, ISlotView<TTool>
-        where TTool : ITool
+        where TTool : IMainData
     {
-        private TTool Tool;
-        private List<TContent> ToolEdges;
+        protected TTool Tool;
+        protected List<TContent> ToolEdges;
+        public int Id => Tool.Id;
         
         public void Initialize(int location, TTool tool, List<TContent> toolEdges)
         {
             Tool = tool;
             ToolEdges = toolEdges;
  
-            if (ToolEdges.Count != Tool.Offsets.Count)
+            if (ToolEdges.Count != Tool.CountEdges)
             {
                 Debug.Log("[ToolControl] ToolEdges.Count != Tool.Offsets.Count ");
                 return;
             }
-            
-            int index = 0;
-            foreach (var toolOffset in Tool.Offsets)
+
+            var i = 0;
+            foreach (var edgeIndex in tool.GetEdges)
             {
-                var edge = ToolEdges[index];
+                var edge = ToolEdges[i];
                 edge.transform.SetParent(transform);
-                edge.UpdateData(location, toolOffset.Key, tool);
-                index++;
+                edge.UpdateData(location, edgeIndex, tool);
+                i++;
             }
+
+            AddListeners();
         }
+
+        protected abstract void AddListeners();
+        protected abstract void RemoveListeners();
 
 
         public void SetParent(Transform parent)
@@ -42,22 +48,23 @@ namespace CNC.Implementation.Controls
 
         public void UpdateVisual(SlotLocationType slotLocationType)
         {
-            int index = 0;
-            foreach (var toolOffset in Tool.Offsets)
+            for (var i = 0; i < ToolEdges.Count; i++)
             {
-                var edge = ToolEdges[index];
+                var edge = ToolEdges[i];
 
-                var siplayType = Tool.Id <= 0 
+                var displayType = Tool.Id <= 0 
                     ? SlotDisplayType.Unload 
-                    : (index == 0 
+                    : (i == 0 
                         ? SlotDisplayType.Load 
                         : SlotDisplayType.Edge);
 
-                edge.ApplyState(siplayType, slotLocationType);
-
-
-                index++;
+                edge.ApplyState(displayType, slotLocationType);
             }
+        }
+
+        private void OnDestroy()
+        {
+            RemoveListeners();
         }
     }
 }

@@ -104,3 +104,11 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+.idea/.idea.Example/.idea/indexLayout.xml
+.idea/.idea.Example/.idea/vcs.xml
+Assets/Settings/UniversalRenderPipelineGlobalSettings.asset
+Packages/manifest.json
+Packages/packages-lock.json
+ProjectSettings/ProjectVersion.txt
+ProjectSettings/ShaderGraphSettings.asset
+ProjectSettings/URPProjectSettings.asset

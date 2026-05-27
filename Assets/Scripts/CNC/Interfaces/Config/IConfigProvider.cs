@@ -4,10 +4,10 @@ namespace CNC.Interfaces.Config
 {
     public interface IConfigProvider
     {
-        OffsetConfig MillingOffsetConfig { get; }
-        OffsetConfig TurningOffsetConfig { get; }
-        ToolConfig MillingToolConfig { get; }
-        ToolConfig TurningToolConfig { get; }
+        AdditionalToolConfig MillingAdditionalConfig { get; }
+        AdditionalToolConfig TurningAdditionalConfig { get; }
+        ExternalToolConfig MillingExternalToolConfig { get; }
+        ExternalToolConfig TurningExternalToolConfig { get; }
         MagazineConfig MillingMagazineConfig { get; }
         MagazineConfig TurningMagazineConfig { get; }
     }

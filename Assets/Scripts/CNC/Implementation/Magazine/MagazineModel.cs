@@ -4,7 +4,7 @@ using CNC.Interfaces.Tool;
 
 namespace CNC.Implementation.Magazine
 {
-    public class MagazineModel<T> : IMagazineModel<T> where T : ITool
+    public class MagazineModel<T> : IMagazineModel<T> where T : IMainData
     {
         private readonly IMagazineRepository<T> _repository;
         

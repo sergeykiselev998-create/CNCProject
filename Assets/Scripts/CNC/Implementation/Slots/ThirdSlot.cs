@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace CNC.Implementation.Slots
 {
-    public class ThirdSlot : BaseSlotHandler, ISlotView<ITool>
+    public class ThirdSlot : BaseSlotHandler, ISlotView<IMainData>
     {
         public void ApplyState(SlotDisplayType state, SlotLocationType context)
         {
         }
 
-        public void UpdateData(int location, int edge, ITool tool)
+        public void UpdateData(int location, int edge, IMainData mainData)
         {
         }
 

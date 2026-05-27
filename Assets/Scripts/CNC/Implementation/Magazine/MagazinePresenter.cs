@@ -6,7 +6,7 @@ using Reflex.Attributes;
 namespace CNC.Implementation.Magazine
 {
     public class MagazinePresenter<TTool> : IMagazinePresenter<TTool>
-    where TTool : ITool
+    where TTool : IMainData
     {
         public IMagazineModel<TTool> Model { get; }
         public IMagazineView<TTool> View { get; }

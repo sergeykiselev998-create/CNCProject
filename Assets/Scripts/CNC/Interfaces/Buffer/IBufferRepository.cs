@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using CNC.Interfaces.Tool;
-using CNC.Interfaces.ToolList;
+using CNC.Interfaces.ToolPanel;
 
 namespace CNC.Interfaces.Buffer
 {
     /// <summary>
     /// Repository interface for buffer slots
     /// </summary>
-    public interface IBufferRepository<T> where T : ITool
+    public interface IBufferRepository<T> where T : IMainData
     {
         IToolRepository<T> ToolRepository { get; }
         List<int> Slots { get; } // ToolId, -1 = empty

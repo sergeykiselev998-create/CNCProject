@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace CNC.Implementation.Slots
 {
-    public class MainSlot : BaseSlotHandler, ISlotView<ITool>
+    public class MainSlot : BaseSlotHandler, ISlotView<IMainData>
     {
         [SerializeField] private TMP_Text m_Location;
         [SerializeField] private TMP_Text m_Edge;
@@ -17,22 +17,21 @@ namespace CNC.Implementation.Slots
         [SerializeField] private Image m_LastInteractIcon;
         [SerializeField] private Image m_SpindleIcon;
 
-        public UnityEvent onNameChanged = new();
+        public event UnityAction<string> OnNameChanged;
 
         private void OnEnable()
         {
-            m_ToolName.onEndEdit.AddListener(OnNameChange);
+            m_ToolName.onEndEdit.AddListener(HandleNameChange);
         }
 
         private void OnDisable()
         {
-            m_ToolName.onEndEdit.RemoveListener(OnNameChange);
+            m_ToolName.onEndEdit.RemoveListener(HandleNameChange);
         }
 
-        private void OnNameChange(string value)
+        private void HandleNameChange(string value)
         {
-            if (m_ToolName.text != value)
-                onNameChanged?.Invoke();
+            OnNameChanged?.Invoke(value);
         }
 
         public void SetSiblingIndex(int siblingIndex)
@@ -65,11 +64,16 @@ namespace CNC.Implementation.Slots
             }
         }
 
-        public void UpdateData(int location, int edge, ITool tool)
+        public void UpdateData(int location, int edge, IMainData mainData)
         {
             m_Location.text = location.ToString();
             m_Edge.text = edge.ToString();
-            m_ToolName.SetTextWithoutNotify(tool.ToolName);
+            SetNameWithoutNotify(mainData.ToolName);
+        }
+
+        public void SetNameWithoutNotify(string newName)
+        {
+            m_ToolName.SetTextWithoutNotify(newName);
         }
 
         public void ResetUI()

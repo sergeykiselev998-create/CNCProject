@@ -1,12 +1,10 @@
 using System;
 using CNC.Interfaces.Tool;
 using CNC.Interfaces.Events;
-using CNC.Interfaces.ToolList;
-using CNC.Interfaces.Views;
 
 namespace CNC.Interfaces.Buffer
 {
-    public interface IBufferPresenter<TTool> : IDisposable where TTool : ITool
+    public interface IBufferPresenter<TTool> : IDisposable where TTool : IMainData
     {
         IBufferModel<TTool> Model { get; }
         IBufferView<TTool> View { get; }

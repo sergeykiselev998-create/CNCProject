@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using CNC.Implementation.Config;
 using CNC.Interfaces.Config;
 using CNC.Interfaces.Magazine;
 using CNC.Interfaces.Tool;
-using CNC.Interfaces.ToolList;
+using CNC.Interfaces.ToolPanel;
 using UnityEngine;
 
 namespace CNC.Implementation.Magazine
@@ -13,7 +12,7 @@ namespace CNC.Implementation.Magazine
     /// <summary>
     /// Repository implementation for magazine slots (always 20 slots)
     /// </summary>
-    public class MagazineRepository<T> : IMagazineRepository<T> where T : ITool
+    public class MagazineRepository<T> : IMagazineRepository<T> where T : IMainData
     {
         private const int MAGAZINE_CAPACITY = 20;
         private const int EMPTY_SLOT = -1;

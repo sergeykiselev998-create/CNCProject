@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using CNC.Implementation.Offsets;
-using CNC.Implementation.Tool;
-using CNC.Interfaces.Offsets;
-using CNC.Interfaces.Tool;
+﻿using CNC.Interfaces.Tool;
 using CNC.Interfaces.ToolHolder;
-using CNC.Interfaces.ToolList;
+using CNC.Interfaces.ToolPanel;
+using UnityEngine.Events;
 
 namespace CNC.Implementation.ToolHolder
 {
     public class ToolHolderModel<TTool> : IToolHolderModel<TTool> 
-        where TTool : ITool
+        where TTool : IMainData
     {
         public TTool CurrentTool { get; private set; }
         public int CurrentLocation { get; private set; } = -1;
@@ -19,8 +15,8 @@ namespace CNC.Implementation.ToolHolder
         
         private IToolRepository<TTool> _repository { get; }
 
-        public event Action<TTool> OnToolChanged;
-        public event Action OnToolUnloaded;
+        public event UnityAction<TTool> OnToolChanged;
+        public event UnityAction OnToolUnloaded;
         
         public ToolHolderModel(IToolRepository<TTool> repository)
         {

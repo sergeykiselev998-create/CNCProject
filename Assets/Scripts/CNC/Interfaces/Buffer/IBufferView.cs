@@ -7,7 +7,7 @@ namespace CNC.Interfaces.Buffer
     /// Interface for the buffer view
     /// </summary>
     public interface IBufferView<in TTool>
-        where TTool : ITool
+        where TTool : IMainData
     {
         void AddBuffer(int location, TTool tool);
     }

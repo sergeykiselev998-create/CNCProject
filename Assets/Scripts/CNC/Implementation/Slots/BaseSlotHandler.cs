@@ -18,12 +18,12 @@ namespace CNC.Implementation.Slots
 
         public virtual void Load(Behaviour element)
         {
-            element.enabled = true;
+            element.gameObject.SetActive(true);
         }
 
         public virtual void Unload(Behaviour element)
         {
-            element.enabled = false;
+            element.gameObject.SetActive(false);
         }
 
         public virtual void DisableInteraction(params Selectable[] elements)

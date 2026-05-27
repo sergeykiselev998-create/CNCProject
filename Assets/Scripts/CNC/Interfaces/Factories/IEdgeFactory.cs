@@ -7,7 +7,7 @@ namespace CNC.Interfaces.Factories
 {
     public interface IEdgeFactory<TContent, TTool>
     where TContent : MonoBehaviour, ISlotView<TTool>
-    where TTool : ITool
+    where TTool : IMainData
     {
         public List<TContent> CreateEdges(TTool tool);
     }

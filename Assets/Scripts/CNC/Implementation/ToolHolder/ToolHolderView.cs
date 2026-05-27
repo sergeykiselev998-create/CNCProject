@@ -4,7 +4,7 @@ using CNC.Interfaces.ToolHolder;
 namespace CNC.Implementation.ToolHolder
 {
     public class ToolHolderView<TTool>: IToolHolderView<TTool>
-    where TTool : ITool
+    where TTool : IMainData
     {
         public IToolHolderView<TTool> MainView { get; }       
         public IToolHolderView<TTool> OffsetView{ get; }  

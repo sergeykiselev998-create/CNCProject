@@ -5,7 +5,7 @@ using CNC.Interfaces.Tool;
 
 namespace CNC.Implementation.Buffer
 {
-    public class BufferModel<T> : IBufferModel<T> where T : ITool
+    public class BufferModel<T> : IBufferModel<T> where T : IMainData
     {
         private readonly IBufferRepository<T> _repository;
         

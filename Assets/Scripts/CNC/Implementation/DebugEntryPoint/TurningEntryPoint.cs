@@ -2,12 +2,10 @@
 using CNC.Implementation.Controls;
 using CNC.Implementation.Factories;
 using CNC.Implementation.Magazine;
-using CNC.Implementation.Offsets;
 using CNC.Implementation.Slots;
 using CNC.Implementation.Strategies;
 using CNC.Implementation.ToolHolder;
-using CNC.Implementation.ToolPanel;
-using CNC.Implementation.ToolList;
+using CNC.Implementation.ToolPanel.Repositories;
 using CNC.Implementation.ToolPanel.Views;
 using CNC.Interfaces.Tool;
 using UnityEngine;
@@ -30,13 +28,14 @@ namespace CNC.Implementation.DebugEntryPoint
         
         protected override void InitializeRepositories()
         {
-            var offsetConfig = ConfigProvider.TurningOffsetConfig;
-            var offsetRepo = new OffsetRepository<ITurningTool>(offsetConfig);
-            OffsetRepo = offsetRepo;
-
-            var toolConfig = ConfigProvider.TurningToolConfig;
-            var toolRepo = new TurningToolRepository(toolConfig, offsetRepo);
-            ToolRepo = toolRepo;
+            var toolConfig = ConfigProvider.TurningExternalToolConfig;
+            var additionalDataConfig = ConfigProvider.TurningAdditionalConfig;
+            
+            var externalRepository = new TurningExternalToolRepository(toolConfig);
+            var additionalRepository = new TurningAdditionalToolRepository(additionalDataConfig);
+            
+            var toolRepo = new TurningToolRepository(externalRepository, additionalRepository);
+            ToolRepository = toolRepo;
 
             var magConfig = ConfigProvider.TurningMagazineConfig;
             var magRepo = new MagazineRepository<ITurningTool>(toolRepo, magConfig);
@@ -48,10 +47,10 @@ namespace CNC.Implementation.DebugEntryPoint
 
         protected override void InitializePresenters()
         {
-            var mainSlotFactory = new SlotFactory<MainSlotControl, MainSlot, ITool>(toolPanelConfig.MainSlotPrefab, toolPanelConfig.MainSlotControl);
+            var mainSlotFactory = new SlotFactory<MainSlotControl, MainSlot, IMainData>(toolPanelConfig.MainSlotPrefab, toolPanelConfig.MainSlotControl);
             var offsetSlotFactory = new SlotFactory<TurningOffsetSlotControl, TurningOffsetSlot, ITurningTool>(toolPanelConfig.TurningOffsetPrefab, toolPanelConfig.TurningOffsetSlotControl);
-            var thirdSlotFactory = new SlotFactory<ThirdSlotControl, ThirdSlot, ITool>(toolPanelConfig.ThirdSlotPrefab, toolPanelConfig.ThirdSlotControl);
-            var fourthSlotFactory = new SlotFactory<FourthSlotControl, FourthSlot, ITool>(toolPanelConfig.FourthSlotPrefab, toolPanelConfig.FourthSlotControl);
+            var thirdSlotFactory = new SlotFactory<ThirdSlotControl, ThirdSlot, IMainData>(toolPanelConfig.ThirdSlotPrefab, toolPanelConfig.ThirdSlotControl);
+            var fourthSlotFactory = new SlotFactory<FourthSlotControl, FourthSlot, IMainData>(toolPanelConfig.FourthSlotPrefab, toolPanelConfig.FourthSlotControl);
             
             var toolHolderView = new ToolHolderView<ITurningTool>(mainView, turningOffsetView, thirdView, fourthView);
             var toolHolderStrategy = new ToolHolderTurningStrategy();
@@ -64,9 +63,9 @@ namespace CNC.Implementation.DebugEntryPoint
             BufferPresenter = new BufferPresenter<ITurningTool>(BufferModel,bufferView);
         }
         
-        protected override SerializableTurningTool ConvertToSerializable(ITurningTool tool)
+        protected override SerializableTurningTool ConvertToSerializable(ITurningTool mainData)
         {
-            return SerializableTurningTool.FromInterface(tool);
+            return SerializableTurningTool.FromInterface(mainData);
         }
     }
 }

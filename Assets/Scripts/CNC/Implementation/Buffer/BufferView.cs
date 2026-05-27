@@ -4,7 +4,7 @@ using CNC.Interfaces.Tool;
 namespace CNC.Implementation.Buffer
 {
     public class BufferView<TTool> : IBufferView<TTool>
-    where TTool : ITool
+    where TTool : IMainData
     {
         public IBufferView<TTool> MainView { get; }       
         public IBufferView<TTool> OffsetView{ get; }  

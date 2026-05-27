@@ -7,7 +7,7 @@ using Reflex.Attributes;
 namespace CNC.Implementation.ToolHolder
 {
     public class ToolHolderPresenter<TTool>: IToolHolderPresenter<TTool>
-    where TTool : ITool
+    where TTool : IMainData
     {
         public IToolHolderModel<TTool> Model { get; }
         public IToolHolderView<TTool> View { get; }

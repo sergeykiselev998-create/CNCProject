@@ -6,7 +6,7 @@ namespace CNC.Interfaces.Machine
     /// <summary>
     /// Interface for the machine presenter
     /// </summary>
-    public interface IMachinePresenter<T> where T : ITool
+    public interface IMachinePresenter<T> where T : IMainData
     {
         IMachine<T> Machine { get; }
         IEventBus EventBus { get; }

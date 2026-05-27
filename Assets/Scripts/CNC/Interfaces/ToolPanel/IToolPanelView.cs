@@ -19,7 +19,7 @@ namespace CNC.Interfaces.ToolPanel
         IToolHolderView<TTool>
         where TControl : MonoBehaviour, ISlotControl<TContent,TTool>
         where TContent : MonoBehaviour, ISlotView<TTool>
-        where TTool : ITool
+        where TTool : IMainData
     {
 
     }

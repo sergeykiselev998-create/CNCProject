@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using CNC.Interfaces.Tool;
-using CNC.Interfaces.ToolList;
+using CNC.Interfaces.ToolPanel;
 
 namespace CNC.Interfaces.Magazine
 {
     /// <summary>
     /// Repository interface for magazine slots
     /// </summary>
-    public interface IMagazineRepository<T> where T : ITool
+    public interface IMagazineRepository<T> where T : IMainData
     {
         IToolRepository<T> ToolRepository { get; }
         Dictionary<int,int> Slots { get; }

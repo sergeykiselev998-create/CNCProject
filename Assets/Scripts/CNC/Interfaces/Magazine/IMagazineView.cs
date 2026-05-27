@@ -7,7 +7,7 @@ namespace CNC.Interfaces.Magazine
     /// Interface for the magazine view
     /// </summary>
     public interface IMagazineView<in TTool>
-    where TTool : ITool
+    where TTool : IMainData
     {
         void AddMagazine(int location, TTool tool);
     }

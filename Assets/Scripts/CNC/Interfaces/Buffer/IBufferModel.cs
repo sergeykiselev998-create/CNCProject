@@ -7,7 +7,7 @@ namespace CNC.Interfaces.Buffer
     /// <summary>
     /// Interface for the buffer model
     /// </summary>
-    public interface IBufferModel<T> where T : ITool
+    public interface IBufferModel<T> where T : IMainData
     {
         bool TryAddTool(int toolId);
         bool TryRemoveTool(int toolId);

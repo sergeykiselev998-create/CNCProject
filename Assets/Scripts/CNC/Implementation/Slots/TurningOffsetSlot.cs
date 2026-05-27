@@ -8,7 +8,7 @@ using UnityEngine.Events;
 
 namespace CNC.Implementation.Slots
 {
-    public class TurningOffsetSlot : BaseSlotHandler, ITurningOffsetView
+    public class TurningOffsetSlot : BaseSlotHandler, ISlotView<ITurningTool>
     {
         [SerializeField] private TMP_InputField m_LengthX;
         [SerializeField] private TMP_InputField m_LengthZ;
@@ -85,12 +85,12 @@ namespace CNC.Implementation.Slots
             }
         }
 
-        public void UpdateData(int location, int edge, ITurningTool tool)
+        public void UpdateData(int location, int edge, ITurningTool mainData)
         {
-            var offset = tool.Offsets[edge];
-            m_LengthX.SetTextWithoutNotify(TextFormatter.Format(offset.X));
-            m_LengthZ.SetTextWithoutNotify(TextFormatter.Format(offset.Z));
-            m_Radius.SetTextWithoutNotify(TextFormatter.Format(tool.ShiftX));
+            var offset = mainData.OffsetEdgeData[edge];
+            m_LengthX.SetTextWithoutNotify(TextFormatter.Format(offset.LengthX));
+            m_LengthZ.SetTextWithoutNotify(TextFormatter.Format(offset.LengthZ));
+            m_Radius.SetTextWithoutNotify(TextFormatter.Format(offset.Radius));
         }
 
         public void ResetUI()

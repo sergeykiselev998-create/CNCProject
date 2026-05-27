@@ -1,12 +1,12 @@
+using CNC.Interfaces.Tool.TurningData;
+
 namespace CNC.Interfaces.Tool
 {
     /// <summary>
     /// Interface for turning tools
     /// </summary>
-    public interface ITurningTool : ITool
+    public interface ITurningTool : IMainData, ITurningOffsetData, ITurningWearData, ITurningMagazineData
     {
-        float ShiftX { get; }
-        float ShiftY { get; }
     }
 }
 

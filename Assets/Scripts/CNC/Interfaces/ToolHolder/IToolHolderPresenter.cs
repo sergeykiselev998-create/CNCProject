@@ -5,7 +5,7 @@ using CNC.Interfaces.Tool;
 
 namespace CNC.Interfaces.ToolHolder
 {
-    public interface IToolHolderPresenter<TTool>: IDisposable where TTool : ITool
+    public interface IToolHolderPresenter<TTool>: IDisposable where TTool : IMainData
     {
         IToolHolderModel<TTool> Model { get; }
         IToolHolderView<TTool> View { get; }

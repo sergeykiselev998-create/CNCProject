@@ -2,7 +2,7 @@
 using System.Linq;
 using CNC.Interfaces.Buffer;
 using CNC.Interfaces.Tool;
-using CNC.Interfaces.ToolList;
+using CNC.Interfaces.ToolPanel;
 using UnityEngine;
 
 namespace CNC.Implementation.Buffer
@@ -10,7 +10,7 @@ namespace CNC.Implementation.Buffer
     /// <summary>
     /// Repository implementation for buffer slots (dynamic list with -1 marker at the end)
     /// </summary>
-    public class BufferRepository<T> : IBufferRepository<T> where T : ITool
+    public class BufferRepository<T> : IBufferRepository<T> where T : IMainData
     {
         [field: SerializeField] public IToolRepository<T> ToolRepository { get; set; }
         [field: SerializeField] public List<int> Slots { get; private set; }

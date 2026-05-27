@@ -3,7 +3,7 @@
 namespace CNC.Interfaces.ToolHolder
 {
     public interface IToolHolderView<in TTool>
-        where TTool : ITool
+        where TTool : IMainData
     {
         void AddToolHolder(int location, TTool tool);
     }
