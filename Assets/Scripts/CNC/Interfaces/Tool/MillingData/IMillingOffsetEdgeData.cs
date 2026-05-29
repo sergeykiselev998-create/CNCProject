@@ -2,9 +2,11 @@
 {
     public interface IMillingOffsetEdgeData
     {
-        float Length { get; set; }
-        float Diameter { get; set; }
-        float TipAngle { get; set; }
-        int NumberOfTeeth { get; set; }
+        float Length { get; }
+        float Diameter { get; }
+        float TipAngle { get; }
+        int NumberOfTeeth { get; }
+        
+        IMillingOffsetEdgeData Clone();
     }
 }

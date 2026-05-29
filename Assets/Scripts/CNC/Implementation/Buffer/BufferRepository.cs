@@ -12,31 +12,28 @@ namespace CNC.Implementation.Buffer
     /// </summary>
     public class BufferRepository<T> : IBufferRepository<T> where T : IMainData
     {
-        [field: SerializeField] public IToolRepository<T> ToolRepository { get; set; }
-        [field: SerializeField] public List<int> Slots { get; private set; }
+        [field: SerializeField] public IToolRepository<T> ToolRepository { get; }
+        [field: SerializeField] public HashSet<int> Slots { get; private set; }
         
         private const int EMPTY_MARKER = -1;
 
         public BufferRepository(IToolRepository<T> toolRepository)
         {
             ToolRepository = toolRepository;
-            Slots = new List<int> { EMPTY_MARKER };
+            Slots = new HashSet<int> { EMPTY_MARKER };
         }
 
         public void Add(int toolId)
         {
-            Slots.Insert(Slots.Count - 1, toolId);
+            Slots.Add(toolId);
         }
 
         public void Remove(int toolId)
         {
-            if (toolId == EMPTY_MARKER) return;
+            if (toolId == EMPTY_MARKER) 
+                return;
             
-            int index = Slots.IndexOf(toolId);
-            if (index != -1)
-            {
-                Slots.RemoveAt(index);
-            }
+            Slots.Remove(toolId);
         }
 
         public bool TryGetTool(int toolId, out T tool)
@@ -46,7 +43,7 @@ namespace CNC.Implementation.Buffer
 
         public void SetTools(IEnumerable<int> bufferTools)
         {
-            Slots = new List<int>(bufferTools) { EMPTY_MARKER };
+            Slots = new HashSet<int>(bufferTools) { EMPTY_MARKER };
         }
         
         public List<int> GetTools()
@@ -56,7 +53,7 @@ namespace CNC.Implementation.Buffer
 
         public T GetEmptyTool()
         {
-            return ToolRepository.CreateEmptyTool();
+            return ToolRepository.EmptyTool;
         }
         
         public bool Contains(int toolId)

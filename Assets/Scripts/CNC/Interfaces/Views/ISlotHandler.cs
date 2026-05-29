@@ -7,12 +7,12 @@ namespace CNC.Interfaces.Views
     {
         void EnableInteraction(Selectable element);
         void DisableInteraction(Selectable element);
-        void Load(Behaviour element);
+        void EnableElement(Behaviour element);
         void Unload(Behaviour element);
     
         void EnableInteraction(params Selectable[] elements);
         void DisableInteraction(params Selectable[] elements);
-        void Load(params Behaviour[] elements);
-        void Unload(params Behaviour[] elements);
+        void EnableElement(params Behaviour[] elements);
+        void DisableElement(params Behaviour[] elements);
     }
 }

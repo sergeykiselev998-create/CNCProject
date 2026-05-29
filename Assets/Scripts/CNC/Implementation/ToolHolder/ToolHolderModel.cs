@@ -1,7 +1,6 @@
 ﻿using CNC.Interfaces.Tool;
 using CNC.Interfaces.ToolHolder;
 using CNC.Interfaces.ToolPanel;
-using UnityEngine.Events;
 
 namespace CNC.Implementation.ToolHolder
 {
@@ -11,28 +10,24 @@ namespace CNC.Implementation.ToolHolder
         public TTool CurrentTool { get; private set; }
         public int CurrentLocation { get; private set; } = -1;
         public int CurrentToolId { get; private set; } = -1;
-        public bool HasTool => CurrentTool != null;
+        public bool HasTool => CurrentTool.Id != GetEmptyTool().Id;
         
-        private IToolRepository<TTool> _repository { get; }
+        private readonly IToolRepository<TTool> _repository;
 
-        public event UnityAction<TTool> OnToolChanged;
-        public event UnityAction OnToolUnloaded;
-        
         public ToolHolderModel(IToolRepository<TTool> repository)
         {
             _repository = repository;
         }
 
-        public bool TryLoadTool(TTool tool, int location)
+        public bool TryLoadTool(int location, int toolId, out TTool tool)
         {
-            if (tool == null)
+            if (_repository.TryGetTool(toolId, out tool))
                 return false;
 
             CurrentTool = tool;
             CurrentLocation = location;
             CurrentToolId = tool.Id;
 
-            OnToolChanged?.Invoke(CurrentTool);
             return true;
         }
 
@@ -41,11 +36,9 @@ namespace CNC.Implementation.ToolHolder
             if (!HasTool)
                 return;
 
-            CurrentTool = default;
+            CurrentTool = GetEmptyTool();
             CurrentLocation = -1;
             CurrentToolId = -1;
-
-            OnToolUnloaded?.Invoke();
         }
 
         public bool TryGetTool(out TTool tool)
@@ -56,7 +49,7 @@ namespace CNC.Implementation.ToolHolder
         
         public TTool GetEmptyTool()
         {
-            return _repository.CreateEmptyTool();
+            return _repository.EmptyTool;
         }
     }
 }

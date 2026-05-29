@@ -1,6 +1,7 @@
 ﻿using CNC.Implementation.Slots;
 using CNC.Interfaces.Tool;
 using CNC.Utils;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace CNC.Implementation.Controls
@@ -15,7 +16,7 @@ namespace CNC.Implementation.Controls
 
         protected override void AddListeners()
         {
-            foreach (var edge in ToolEdges)
+            foreach (var edge in ToolEdges.Values)
             {
                 edge.OnLengthChanged += HandleLengthChange;
                 edge.OnDiameterChanged += HandleDiameterChange;
@@ -24,7 +25,7 @@ namespace CNC.Implementation.Controls
 
         protected override void RemoveListeners()
         {
-            foreach (var edge in ToolEdges)
+            foreach (var edge in ToolEdges.Values)
             {
                 edge.OnLengthChanged -= HandleLengthChange;
                 edge.OnDiameterChanged -= HandleDiameterChange;
@@ -65,19 +66,6 @@ namespace CNC.Implementation.Controls
         {
             if (TryGetEdge(edgeIndex, out var edge))
                 edge.SetDiameterWithoutNotify(TextFormatter.Format(diameter));
-        }
-
-        private bool TryGetEdge(int edgeIndex, out MillingOffsetSlot edge)
-        {
-            edgeIndex--;
-            if (edgeIndex < 0 || edgeIndex >= ToolEdges.Count)
-            {
-                edge = null;
-                return false;
-            }
-    
-            edge = ToolEdges[edgeIndex];
-            return edge != null;
         }
     }
 }

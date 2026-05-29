@@ -1,7 +1,10 @@
 ﻿using CNC.Enums;
 using CNC.Implementation.Config;
+using CNC.Implementation.ToolData;
 using CNC.Interfaces.Config;
 using CNC.Interfaces.Tool;
+using CNC.Interfaces.Tool.MillingData;
+using CNC.Utils;
 
 namespace CNC.Implementation.ToolPanel.Repositories
 {
@@ -118,67 +121,108 @@ namespace CNC.Implementation.ToolPanel.Repositories
         {
             for (int edge = 1; edge <= edgesCount; edge++)
             {
-                LoadOffsetEdgeFloat(sectionKey, edge, tool);
-                LoadOffsetEdgeInt(sectionKey, edge, tool);
+                LoadOffsetEdgeData(sectionKey, edge, tool);
                 LoadWearEdgeData(sectionKey, edge, tool);
             }
         }
         
-        private void LoadOffsetEdgeFloat(string sectionKey, int edge, IMillingTool tool)
+        private void LoadOffsetEdgeData(string sectionKey, int edge, IMillingTool tool)
         {
-            string dataStr = _reader.ReadString(sectionKey, _config.GetOffsetEdgeFloatKey(edge), "");
+            // Парсим данные
+            var floatData = ParseFloatData(sectionKey, edge);
+            var intData = ParseIntData(sectionKey, edge);
             
-            if (string.IsNullOrEmpty(dataStr)) return;
-            if (!tool.OffsetEdgeData.TryGetValue(edge, out var offsetEdge)) return;
+            if (!floatData.HasValue && !intData.HasValue) 
+                return;
             
-            var values = dataStr.Split(',');
-            if (values.Length >= _config.OffsetEdgeFloatValueCount)
+            // Получаем или создаем объект
+            if (!tool.OffsetEdgeData.TryGetValue(edge, out var offsetEdgeInterface))
             {
-                float.TryParse(values[0], out float length);
-                float.TryParse(values[2], out float tipAngle);
-                
-                offsetEdge.Length = length;
-                offsetEdge.TipAngle = tipAngle;
+                // Edge 2+ - создаем новый
+                var newEdge = new MillingOffsetEdgeData();
+                if (floatData.HasValue)
+                {
+                    newEdge.Length = floatData.Value.length;
+                    newEdge.Diameter = floatData.Value.diameter;
+                    newEdge.TipAngle = floatData.Value.tipAngle;
+                }
+                if (intData.HasValue)
+                {
+                    newEdge.NumberOfTeeth = intData.Value;
+                }
+                tool.OffsetEdgeData[edge] = newEdge;
+                return;
+            }
+            
+            // Edge 1 - обновляем существующий
+            if (!offsetEdgeInterface.TryCast(out MillingOffsetEdgeData offsetEdge)) 
+                return;
+            
+            if (floatData.HasValue)
+            {
+                offsetEdge.Length = floatData.Value.length;
+                offsetEdge.TipAngle = floatData.Value.tipAngle;
+                // Diameter не трогаем
+            }
+            if (intData.HasValue)
+            {
+                offsetEdge.NumberOfTeeth = intData.Value;
             }
         }
-        
-        private void LoadOffsetEdgeInt(string sectionKey, int edge, IMillingTool tool)
+
+        private (float length, float diameter, float tipAngle)? ParseFloatData(string sectionKey, int edge)
         {
-            string dataStr = _reader.ReadString(sectionKey, _config.GetOffsetEdgeIntKey(edge), "");
-            
-            if (string.IsNullOrEmpty(dataStr)) return;
-            if (!tool.OffsetEdgeData.TryGetValue(edge, out var offsetEdge)) return;
+            string dataStr = _reader.ReadString(sectionKey, _config.GetOffsetEdgeFloatKey(edge), "");
+            if (string.IsNullOrEmpty(dataStr)) return null;
             
             var values = dataStr.Split(',');
-            if (values.Length >= _config.OffsetEdgeIntValueCount)
-            {
-                int.TryParse(values[0], out int teeth);
-                offsetEdge.NumberOfTeeth = teeth;
-            }
+            if (values.Length < _config.OffsetEdgeFloatValueCount) return null;
+            
+            float.TryParse(values[0], out float length);
+            float.TryParse(values[1], out float diameter);
+            float.TryParse(values[2], out float tipAngle);
+            
+            return (length, diameter, tipAngle);
+        }
+
+        private int? ParseIntData(string sectionKey, int edge)
+        {
+            string dataStr = _reader.ReadString(sectionKey, _config.GetOffsetEdgeIntKey(edge), "");
+            if (string.IsNullOrEmpty(dataStr)) return null;
+            
+            var values = dataStr.Split(',');
+            if (values.Length < _config.OffsetEdgeIntValueCount) return null;
+            
+            int.TryParse(values[0], out int numberOfTeeth);
+            return numberOfTeeth;
         }
         
         private void LoadWearEdgeData(string sectionKey, int edge, IMillingTool tool)
         {
             string dataStr = _reader.ReadString(sectionKey, _config.GetWearEdgeFloatKey(edge), "");
             
-            if (string.IsNullOrEmpty(dataStr)) return;
-            if (!tool.WearEdgeData.TryGetValue(edge, out var wearEdge)) return;
+            if (string.IsNullOrEmpty(dataStr)) 
+                return;
             
             var values = dataStr.Split(',');
-            if (values.Length >= _config.WearEdgeFloatValueCount)
+            if (values.Length < _config.WearEdgeFloatValueCount) 
+                return;
+            
+            float.TryParse(values[0], out float wearLength);
+            float.TryParse(values[1], out float wearDiameter);
+            float.TryParse(values[2], out float toolLife);
+            float.TryParse(values[3], out float toolNominalLife);
+            float.TryParse(values[4], out float toolLimitLife);
+            float.TryParse(values[5], out float toolQuantity);
+            float.TryParse(values[6], out float toolNominalQuantity);
+            float.TryParse(values[7], out float toolLimitQuantity);
+            float.TryParse(values[8], out float toolWear);
+            float.TryParse(values[9], out float toolNominalWear);
+            float.TryParse(values[10], out float toolLimitWear);
+            
+            if (tool.WearEdgeData.TryGetValue(edge, out var wearEdge))
             {
-                float.TryParse(values[0], out float wearLength);
-                float.TryParse(values[1], out float wearDiameter);
-                float.TryParse(values[2], out float toolLife);
-                float.TryParse(values[3], out float toolNominalLife);
-                float.TryParse(values[4], out float toolLimitLife);
-                float.TryParse(values[5], out float toolQuantity);
-                float.TryParse(values[6], out float toolNominalQuantity);
-                float.TryParse(values[7], out float toolLimitQuantity);
-                float.TryParse(values[8], out float toolWear);
-                float.TryParse(values[9], out float toolNominalWear);
-                float.TryParse(values[10], out float toolLimitWear);
-                
+                // WearEdge существует - обновляем все поля
                 wearEdge.WearLength = wearLength;
                 wearEdge.WearDiameter = wearDiameter;
                 wearEdge.ToolLife = toolLife;
@@ -190,6 +234,25 @@ namespace CNC.Implementation.ToolPanel.Repositories
                 wearEdge.ToolWear = toolWear;
                 wearEdge.ToolNominalWear = toolNominalWear;
                 wearEdge.ToolLimitWear = toolLimitWear;
+            }
+            else
+            {
+                // WearEdge не существует - создаем новый
+                wearEdge = new MillingWearEdgeData
+                {
+                    WearLength = wearLength,
+                    WearDiameter = wearDiameter,
+                    ToolLife = toolLife,
+                    ToolNominalLife = toolNominalLife,
+                    ToolLimitLife = toolLimitLife,
+                    ToolQuantity = toolQuantity,
+                    ToolNominalQuantity = toolNominalQuantity,
+                    ToolLimitQuantity = toolLimitQuantity,
+                    ToolWear = toolWear,
+                    ToolNominalWear = toolNominalWear,
+                    ToolLimitWear = toolLimitWear
+                };
+                tool.WearEdgeData[edge] = wearEdge;
             }
         }
     }

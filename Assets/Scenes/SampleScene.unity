@@ -372,7 +372,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 5
+    m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 5
   m_ChildForceExpandWidth: 1
@@ -697,7 +697,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 5
+    m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 5
   m_ChildForceExpandWidth: 1
@@ -2774,7 +2774,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 5
+    m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 5
   m_ChildForceExpandWidth: 1
@@ -3057,7 +3057,7 @@ MonoBehaviour:
     m_Top: 5
     m_Bottom: 5
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -3305,7 +3305,7 @@ MonoBehaviour:
     m_Left: 0
     m_Right: 0
     m_Top: 0
-    m_Bottom: 5
+    m_Bottom: 0
   m_ChildAlignment: 0
   m_Spacing: 5
   m_ChildForceExpandWidth: 1
@@ -4059,7 +4059,7 @@ MonoBehaviour:
     m_Top: 5
     m_Bottom: 5
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -4343,7 +4343,7 @@ MonoBehaviour:
     m_Top: 5
     m_Bottom: 5
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -4433,8 +4433,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00ed321acf4140bf9997ac5ef86a2d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Offsets:
-    _serializedList: []
   tools:
     _serializedList: []
   magazine:
@@ -4442,7 +4440,7 @@ MonoBehaviour:
   buffer: 
   toolPanelConfig: {fileID: 11400000, guid: f7591773e0d965540b65a24dd544b517, type: 2}
   mainView: {fileID: 1536497359}
-  millingOffsetView: {fileID: 471927514}
+  offsetView: {fileID: 471927514}
   thirdView: {fileID: 1744423431}
   fourthView: {fileID: 1939818982}
 --- !u!114 &1834796522
@@ -4457,8 +4455,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8eaf9ec26f848c5a89853e1d417bac6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Offsets:
-    _serializedList: []
   tools:
     _serializedList: []
   magazine:
@@ -4837,7 +4833,7 @@ MonoBehaviour:
     m_Top: 5
     m_Bottom: 5
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1

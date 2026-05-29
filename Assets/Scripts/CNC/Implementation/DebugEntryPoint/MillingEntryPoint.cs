@@ -117,7 +117,7 @@ namespace CNC.Implementation.DebugEntryPoint
 
         private void OnApplicationQuit()
         {
-            ToolRepository.SaveAdditional();
+             ToolRepository.SaveAdditional();
         }
     }
 }

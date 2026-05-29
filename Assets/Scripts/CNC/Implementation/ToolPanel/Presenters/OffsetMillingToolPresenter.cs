@@ -72,7 +72,7 @@ namespace CNC.Implementation.ToolPanel.Presenters
         //Diameter
         private void UpdateDiameterInModel(int id, int edge, float diameter)
         {
-            Model.UpdateLength(id, edge, diameter);
+            Model.UpdateDiameter(id, edge, diameter);
         }
         
         private void UpdateDiameterInControl(int id, int edge, float diameter)

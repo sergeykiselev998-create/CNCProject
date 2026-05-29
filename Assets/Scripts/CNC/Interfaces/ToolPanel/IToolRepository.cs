@@ -9,7 +9,7 @@ namespace CNC.Interfaces.ToolPanel
     public interface IToolRepository<T> where T : IMainData
     {
         Dictionary<int, T> Tools { get; }
-        T CreateEmptyTool();
+        T EmptyTool { get; }
         void Load();
         bool TryGetTool(int id, out T tool);
         void AddTool(T tool);

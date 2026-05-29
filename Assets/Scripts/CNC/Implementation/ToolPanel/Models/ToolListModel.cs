@@ -17,14 +17,8 @@ namespace CNC.Implementation.ToolPanel.Models
             _repository = repository;
         }
 
-        public void UpdateToolName(int id, string newName)
-        {
-            if (!TryGetTool(id, out var tool))
-                return;
+        public abstract void UpdateToolName(int id, string newName);
 
-            tool.ToolName = newName;
-            OnToolNameChanged?.Invoke(id, newName);
-        }
         
         public bool TryGetTool(int id, out TTool tool)
         {
@@ -34,6 +28,11 @@ namespace CNC.Implementation.ToolPanel.Models
                 Debug.Log($"[{GetType().Name}] Tool not found by id: {id}");
             
             return result;
+        }
+
+        protected void OnToolNameChangedHandler(int id, string newName)
+        {
+            OnToolNameChanged?.Invoke(id,newName);
         }
     }
 }

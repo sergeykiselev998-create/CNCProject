@@ -18,5 +18,23 @@ namespace CNC.Implementation.ToolData
         public float ToolWear { get; set; }
         public float ToolNominalWear { get; set; }
         public float ToolLimitWear { get; set; }
+        
+        public IMillingWearEdgeData Clone()
+        {
+            return new MillingWearEdgeData
+            {
+                WearLength = WearLength,
+                WearDiameter = WearDiameter,
+                ToolLife = ToolLife,
+                ToolNominalLife = ToolNominalLife,
+                ToolLimitLife = ToolLimitLife,
+                ToolQuantity = ToolQuantity,
+                ToolNominalQuantity = ToolNominalQuantity,
+                ToolLimitQuantity = ToolLimitQuantity,
+                ToolWear = ToolWear,
+                ToolNominalWear = ToolNominalWear,
+                ToolLimitWear = ToolLimitWear
+            };
+        }
     }
 }

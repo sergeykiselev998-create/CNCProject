@@ -1,19 +1,35 @@
 ﻿using CNC.Implementation.Tool;
+using CNC.Implementation.ToolData;
 using CNC.Interfaces.Tool;
 using CNC.Interfaces.Tool.MillingData;
 using CNC.Interfaces.ToolPanel;
-using UnityEngine;
 using UnityEngine.Events;
+using CNC.Utils;
 
 namespace CNC.Implementation.ToolPanel.Models
 {
     public class MillingToolListModel : ToolListModel<IMillingTool>
     {
+
         public event UnityAction<int, int, float> OnLengthChanged; 
-        public event UnityAction<int, int, float> OnDiameterChanged; 
+        public event UnityAction<int, int, float> OnDiameterChanged;
+
+        public event UnityAction<int, int> OnEdgeAdded;
         
         public MillingToolListModel(IToolRepository<IMillingTool> repository) : base(repository)
         {
+        }
+        
+        public override void UpdateToolName(int id, string newName)
+        {
+            if (!TryGetTool(id, out var toolInterface))
+                return;
+
+            if(!toolInterface.TryCast(out MillingTool tool))
+                return;
+            
+            tool.ToolName = newName;
+            OnToolNameChangedHandler(id, newName);
         }
         
         public void UpdateLength(int id, int edge, float length)
@@ -21,7 +37,10 @@ namespace CNC.Implementation.ToolPanel.Models
             if (!TryGetTool(id, out var tool))
                 return;
 
-            if (!TryGetOffset(tool, edge, out var offset))
+            if (!TryGetOffset(tool, edge, out var offsetInterface))
+                return;
+            
+            if(!offsetInterface.TryCast(out MillingOffsetEdgeData offset))
                 return;
 
             offset.Length = length;
@@ -33,7 +52,10 @@ namespace CNC.Implementation.ToolPanel.Models
             if (!TryGetTool(id, out var tool))
                 return;
 
-            if (!TryGetOffset(tool, edge, out var offset))
+            if (!TryGetOffset(tool, edge, out var offsetInterface))
+                return;
+            
+            if(!offsetInterface.TryCast(out MillingOffsetEdgeData offset))
                 return;
             
             offset.Diameter = diameter;
@@ -42,12 +64,18 @@ namespace CNC.Implementation.ToolPanel.Models
         
         public bool TryGetOffset(IMillingTool tool, int edge, out IMillingOffsetEdgeData offset)
         {
-            var result = tool.OffsetEdgeData.TryGetValue(edge, out offset);
+            return tool.OffsetEdgeData.TryGetValue(edge, out offset);
+        }
+
+        public void AddEdge(int id)
+        {
+            if (!TryGetTool(id, out var toolInterface))
+                return;
+
+            if(!toolInterface.TryCast(out MillingTool tool))
+                return;
             
-            if (!result)
-                Debug.Log($"[{GetType().Name}] Edge {edge} doesn't exist in tool {tool.Id}");
             
-            return result;
         }
     }
 }

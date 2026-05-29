@@ -10,7 +10,7 @@ namespace CNC.Interfaces.Buffer
     public interface IBufferRepository<T> where T : IMainData
     {
         IToolRepository<T> ToolRepository { get; }
-        List<int> Slots { get; } // ToolId, -1 = empty
+        HashSet<int> Slots { get; } // ToolId, -1 = empty
     
         void Add(int toolId);
         void Remove(int toolId);

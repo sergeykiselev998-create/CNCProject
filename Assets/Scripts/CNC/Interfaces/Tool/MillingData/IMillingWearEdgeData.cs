@@ -16,5 +16,7 @@
         float ToolWear { get; set; }
         float ToolNominalWear { get; set; }
         float ToolLimitWear { get; set; }
+        
+        IMillingWearEdgeData Clone();
     }
 }

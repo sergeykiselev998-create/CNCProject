@@ -30,5 +30,21 @@ namespace CNC.Implementation.Buffer
             ThirdView.AddBuffer(location, tool);        
             FourthView.AddBuffer(location, tool); 
         }
+
+        public void UnloadBuffer(int toolId)
+        {
+            MainView.UnloadBuffer(toolId);        
+            OffsetView.UnloadBuffer(toolId); 
+            ThirdView.UnloadBuffer(toolId);         
+            FourthView.UnloadBuffer(toolId); 
+        }
+
+        public void LoadBuffer(int location, TTool tool)
+        {
+            MainView.LoadBuffer(location, tool);        
+            OffsetView.LoadBuffer(location, tool);
+            ThirdView.LoadBuffer(location, tool);         
+            FourthView.LoadBuffer(location, tool); 
+        }
     }
 }

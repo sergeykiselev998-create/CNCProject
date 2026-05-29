@@ -10,6 +10,8 @@ namespace CNC.Interfaces.Buffer
         where TTool : IMainData
     {
         void AddBuffer(int location, TTool tool);
+        void UnloadBuffer(int toolId);
+        void LoadBuffer(int location, TTool tool);
     }
 }
 

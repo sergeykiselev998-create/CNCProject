@@ -49,15 +49,15 @@ namespace CNC.Implementation.Slots
             switch (state)
             {
                 case SlotDisplayType.Load:
-                    Load(m_Length, m_Diameter, m_TipAngle, m_CoolantToggle);
+                    EnableElement(m_Length, m_Diameter, m_TipAngle, m_CoolantToggle);
                     break;
 
                 case SlotDisplayType.Unload:
-                    Unload(m_Length, m_Diameter, m_TipAngle, m_CoolantToggle);
+                    DisableElement(m_Length, m_Diameter, m_TipAngle, m_CoolantToggle);
                     break;
 
                 case SlotDisplayType.Edge:
-                    Load(m_Length, m_Diameter, m_TipAngle);
+                    EnableElement(m_Length, m_Diameter, m_TipAngle);
                     DisableInteraction(m_CoolantToggle);
                     break;
             }

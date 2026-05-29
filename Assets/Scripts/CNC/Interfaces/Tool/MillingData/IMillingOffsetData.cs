@@ -8,6 +8,6 @@ namespace CNC.Interfaces.Tool.MillingData
         bool Coolant1 { get; set; }
         bool Coolant2 { get; set; }
         SpindleDirection SpindleDirection { get; set; }
-        Dictionary<int, IMillingOffsetEdgeData> OffsetEdgeData { get; }
+        SortedDictionary<int, IMillingOffsetEdgeData> OffsetEdgeData { get; }
     }
 }

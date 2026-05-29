@@ -61,6 +61,11 @@ namespace CNC.Implementation.ToolPanel.Presenters
             _model.UpdateToolName(id, formatName);
         }
 
+        private void AddEdgeInModel(int id)
+        {
+            
+        }
+
         public virtual void Dispose()
         {
             RemoveListeners();

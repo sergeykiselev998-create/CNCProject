@@ -9,6 +9,6 @@ namespace CNC.Interfaces.Tool.TurningData
         bool Coolant2 { get; set;  }
         SpindleDirection SpindleDirection { get; set;  }
         HolderDirection HolderDirection { get;  set; }
-        Dictionary<int, ITurningOffsetEdgeData> OffsetEdgeData { get; }
+        SortedDictionary<int, ITurningOffsetEdgeData> OffsetEdgeData { get; }
     }
 }

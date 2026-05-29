@@ -30,5 +30,21 @@ namespace CNC.Implementation.ToolHolder
             ThirdView.AddToolHolder(location, tool);        
             FourthView.AddToolHolder(location, tool); 
         }
+
+        public void LoadToolHolder(int location, TTool tool)
+        {
+            MainView.LoadToolHolder(location, tool);        
+            OffsetView.LoadToolHolder(location, tool); 
+            ThirdView.LoadToolHolder(location, tool);        
+            FourthView.LoadToolHolder(location, tool); 
+        }
+
+        public void UnloadToolHolder(int location, TTool emptyTool)
+        {
+            MainView.UnloadToolHolder(location, emptyTool);        
+            OffsetView.UnloadToolHolder(location, emptyTool); 
+            ThirdView.UnloadToolHolder(location, emptyTool);        
+            FourthView.UnloadToolHolder(location, emptyTool); 
+        }
     }
 }

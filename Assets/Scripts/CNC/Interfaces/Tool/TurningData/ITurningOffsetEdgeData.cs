@@ -2,9 +2,9 @@
 {
     public interface ITurningOffsetEdgeData
     {
-        float LengthX { get; set; }
-        float LengthZ  { get; set; }
-        float Radius { get; set; }
+        float LengthX { get; }
+        float LengthZ  { get; }
+        float Radius { get; }
         float HolderAngle { get; set; }
         int InsertAngle { get; set; }
         float InsertLength { get; set; }

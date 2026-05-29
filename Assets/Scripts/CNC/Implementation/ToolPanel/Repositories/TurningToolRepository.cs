@@ -10,7 +10,7 @@ namespace CNC.Implementation.ToolPanel.Repositories
         {
         }
         
-        public override ITurningTool CreateEmptyTool()
+        protected override ITurningTool CreateEmptyTool()
         {
             return new TurningTool(
                 id: -1,

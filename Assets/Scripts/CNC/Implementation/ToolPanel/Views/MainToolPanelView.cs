@@ -12,6 +12,9 @@ namespace CNC.Implementation.ToolPanel.Views
     {
         public event UnityAction<int, string> OnNameChanged;
         public event UnityAction<int> OnNameChangeFailed;
+
+        public event UnityAction<int, int> OnAddEdge;
+        public event UnityAction<int, int> OnRemoveEdge;
         
         protected override void AddListeners(ISlotControl<MainSlot, IMainData> slotControl)
         {
@@ -20,6 +23,9 @@ namespace CNC.Implementation.ToolPanel.Views
             
             typedControl.OnNameChanged += OnNameChanged;
             typedControl.OnNameChangeFailed += OnNameChangeFailed;
+
+            typedControl.OnAddEdge += OnAddEdge;
+            typedControl.OnRemoveEdge += OnRemoveEdge;
         }
         
         protected override void RemoveListeners(ISlotControl<MainSlot, IMainData> slotControl)
@@ -29,6 +35,9 @@ namespace CNC.Implementation.ToolPanel.Views
             
             typedControl.OnNameChanged -= OnNameChanged;
             typedControl.OnNameChangeFailed -= OnNameChangeFailed;
+            
+            typedControl.OnAddEdge -= OnAddEdge;
+            typedControl.OnRemoveEdge -= OnRemoveEdge;
         }
 
         public void UpdateToolNameInControl(int id, string formatName)

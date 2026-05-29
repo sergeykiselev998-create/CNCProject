@@ -11,6 +11,7 @@ namespace CNC.Interfaces.Factories
         where TTool : IMainData
     {
         ISlotControl<TContent, TTool> CreateSlotControl();
-        public List<TContent> CreateEdges(TTool tool);
+        SortedDictionary<int, TContent>  CreateEdges(TTool tool);
+        TContent CreateSingleEdge();
     }
 }

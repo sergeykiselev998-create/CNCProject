@@ -10,7 +10,7 @@ namespace CNC.Implementation.ToolPanel.Repositories
         {
         }
         
-        public override IMillingTool CreateEmptyTool()
+        protected override IMillingTool CreateEmptyTool()
         {
             return new MillingTool(
                 id: -1,

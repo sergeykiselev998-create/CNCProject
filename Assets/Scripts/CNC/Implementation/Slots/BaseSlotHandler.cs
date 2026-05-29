@@ -16,7 +16,7 @@ namespace CNC.Implementation.Slots
             element.interactable = false;
         }
 
-        public virtual void Load(Behaviour element)
+        public virtual void EnableElement(Behaviour element)
         {
             element.gameObject.SetActive(true);
         }
@@ -38,13 +38,13 @@ namespace CNC.Implementation.Slots
                 EnableInteraction(element);
         }
 
-        public virtual void Load(params Behaviour[] elements)
+        public virtual void EnableElement(params Behaviour[] elements)
         {
             foreach (var element in elements)
-                Load(element);
+                EnableElement(element);
         }
 
-        public virtual void Unload(params Behaviour[] elements)
+        public virtual void DisableElement(params Behaviour[] elements)
         {
             foreach (var element in elements)
                 Unload(element);

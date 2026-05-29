@@ -1,5 +1,4 @@
 using CNC.Interfaces.Tool;
-using CNC.Interfaces.Views;
 
 namespace CNC.Interfaces.Magazine
 {
@@ -10,6 +9,8 @@ namespace CNC.Interfaces.Magazine
     where TTool : IMainData
     {
         void AddMagazine(int location, TTool tool);
+        void UnloadMagazine(int location, TTool emptyTool);
+        void LoadMagazine(int location, TTool tool);
     }
 }
 

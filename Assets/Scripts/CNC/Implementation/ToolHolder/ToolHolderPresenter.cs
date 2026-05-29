@@ -27,12 +27,25 @@ namespace CNC.Implementation.ToolHolder
         {
             if (!Strategy.IsUIAllowed)
                 return;
+            
             if (!Model.TryGetTool(out var tool))
-            {
                 tool = Model.GetEmptyTool();
-            }
-            View.AddToolHolder(-1, tool);
+            
+            View.AddToolHolder(Model.CurrentLocation, tool);
         }
+
+        public void Load(int location, int toolId)
+        {
+            if(Model.TryLoadTool(location, toolId, out var tool))
+                View.LoadToolHolder(location, tool);
+        }
+
+        public void Unload()
+        {
+            Model.UnloadTool();
+            View.UnloadToolHolder(Model.CurrentLocation, Model.GetEmptyTool());
+        }
+        
         public void Dispose()
         {
         }

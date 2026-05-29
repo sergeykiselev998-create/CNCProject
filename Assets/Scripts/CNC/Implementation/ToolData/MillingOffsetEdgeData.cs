@@ -19,5 +19,16 @@ namespace CNC.Implementation.ToolData
             TipAngle = tipAngle;
             NumberOfTeeth = numberOfTeeth;
         }
+
+        public IMillingOffsetEdgeData Clone()
+        {
+            return new MillingOffsetEdgeData
+            {
+                Length = Length,
+                Diameter = Diameter,
+                TipAngle = TipAngle,
+                NumberOfTeeth = NumberOfTeeth
+            };
+        }
     }
 }

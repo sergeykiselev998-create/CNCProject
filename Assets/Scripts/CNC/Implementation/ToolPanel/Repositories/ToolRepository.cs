@@ -10,8 +10,9 @@ namespace CNC.Implementation.ToolPanel.Repositories
         private readonly ExternalToolRepository<T> _externalRepository;
         private readonly AdditionalToolRepository<T> _additionalRepository;
         private Dictionary<int, T> _tools = new();
-    
         public Dictionary<int, T> Tools => _tools;
+
+        public T EmptyTool { get; private set; }
     
         protected ToolRepository(ExternalToolRepository<T> externalRepository, AdditionalToolRepository<T> additionalRepository)
         {
@@ -19,7 +20,7 @@ namespace CNC.Implementation.ToolPanel.Repositories
             _additionalRepository = additionalRepository;
         }
 
-        public abstract T CreateEmptyTool();
+        protected abstract T CreateEmptyTool();
 
         public void Load()
         {
@@ -31,6 +32,8 @@ namespace CNC.Implementation.ToolPanel.Repositories
                 _additionalRepository.TryLoad(id, ref tool);
                 _tools[id] = tool;
             }
+            
+            EmptyTool = CreateEmptyTool();
         }
     
         public void SaveAdditional()

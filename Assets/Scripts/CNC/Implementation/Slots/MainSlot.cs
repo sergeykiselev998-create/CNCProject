@@ -17,7 +17,11 @@ namespace CNC.Implementation.Slots
         [SerializeField] private Image m_LastInteractIcon;
         [SerializeField] private Image m_SpindleIcon;
 
+        private int _currentEdge;
+        
         public event UnityAction<string> OnNameChanged;
+        public event UnityAction<int> OnAddEdge;
+        public event UnityAction<int> OnRemoveEdge;
 
         private void OnEnable()
         {
@@ -29,6 +33,16 @@ namespace CNC.Implementation.Slots
             m_ToolName.onEndEdit.RemoveListener(HandleNameChange);
         }
 
+        public void HandleAddEdge()
+        {
+            OnAddEdge?.Invoke(_currentEdge);
+        }
+        
+        public void HandleRemoveEdge()
+        {
+            OnRemoveEdge?.Invoke(_currentEdge);
+        }
+        
         private void HandleNameChange(string value)
         {
             OnNameChanged?.Invoke(value);
@@ -49,16 +63,16 @@ namespace CNC.Implementation.Slots
             switch (state)
             {
                 case SlotDisplayType.Load:
-                    Load(m_Location, m_Edge, m_ToolName);
+                    EnableElement(m_Location, m_Edge, m_ToolName);
                     break;
 
                 case SlotDisplayType.Unload:
-                    Unload(m_Edge, m_ToolName);
+                    DisableElement(m_Edge, m_ToolName);
                     break;
 
                 case SlotDisplayType.Edge:
                     Unload(m_Location);
-                    Load( m_Edge, m_ToolName);
+                    EnableElement( m_Edge, m_ToolName);
                     DisableInteraction(m_ToolName);
                     break;
             }
@@ -66,6 +80,8 @@ namespace CNC.Implementation.Slots
 
         public void UpdateData(int location, int edge, IMainData mainData)
         {
+            _currentEdge = edge;
+            
             m_Location.text = location.ToString();
             m_Edge.text = edge.ToString();
             SetNameWithoutNotify(mainData.ToolName);

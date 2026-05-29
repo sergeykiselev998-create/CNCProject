@@ -29,17 +29,23 @@ namespace CNC.Implementation.Factories
             var toolControl = Object.Instantiate(ToolControlPrefab);
             return toolControl;
         }
-
-        public List<TContent> CreateEdges(TTool tool)
+        
+        public SortedDictionary<int, TContent> CreateEdges(TTool tool)
         {
-            var list = new List<TContent>();
-            for (var i = 0; i < tool.CountEdges; i++)
+            var dict = new SortedDictionary<int, TContent>();
+    
+            foreach (var edgeIndex in tool.GetEdges)
             {
-                var content = Object.Instantiate(EdgePrefab);
-                list.Add(content);
+                var edge = Object.Instantiate(EdgePrefab);
+                dict[edgeIndex] = edge;
             }
-
-            return list;
+    
+            return dict;
+        }
+        
+        public TContent CreateSingleEdge()
+        {
+            return Object.Instantiate(EdgePrefab);
         }
     }
 }

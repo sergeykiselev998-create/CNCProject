@@ -6,5 +6,7 @@ namespace CNC.Interfaces.ToolHolder
         where TTool : IMainData
     {
         void AddToolHolder(int location, TTool tool);
+        void LoadToolHolder(int location, TTool tool);
+        void UnloadToolHolder(int location, TTool emptyTool);
     }
 }

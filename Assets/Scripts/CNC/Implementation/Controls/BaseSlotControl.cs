@@ -11,13 +11,20 @@ namespace CNC.Implementation.Controls
         where TTool : IMainData
     {
         protected TTool Tool;
-        protected List<TContent> ToolEdges;
+        protected SortedDictionary<int, TContent>  ToolEdges;
         public int Id => Tool.Id;
         
-        public void Initialize(int location, TTool tool, List<TContent> toolEdges)
+        private SlotLocationType CurrentLocationType { get; set; }
+        private int CurrentLocation { get; set; }
+        
+        protected abstract void AddListeners();
+        protected abstract void RemoveListeners();
+        
+        public void Initialize(int location, TTool tool, SortedDictionary<int, TContent>  toolEdges)
         {
             Tool = tool;
             ToolEdges = toolEdges;
+            CurrentLocation = location;
  
             if (ToolEdges.Count != Tool.CountEdges)
             {
@@ -25,33 +32,25 @@ namespace CNC.Implementation.Controls
                 return;
             }
 
-            var i = 0;
             foreach (var edgeIndex in tool.GetEdges)
             {
-                var edge = ToolEdges[i];
+                var edge = ToolEdges[edgeIndex];
                 edge.transform.SetParent(transform);
                 edge.UpdateData(location, edgeIndex, tool);
-                i++;
             }
 
             AddListeners();
         }
 
-        protected abstract void AddListeners();
-        protected abstract void RemoveListeners();
-
-
-        public void SetParent(Transform parent)
-        {
-            transform.SetParent(parent);
-        }
-
         public void UpdateVisual(SlotLocationType slotLocationType)
         {
-            for (var i = 0; i < ToolEdges.Count; i++)
+            CurrentLocationType = slotLocationType;
+            
+            var i = 0;
+            foreach (var edge in ToolEdges.Values)
             {
-                var edge = ToolEdges[i];
-
+                edge.SetSiblingIndex(i);
+        
                 var displayType = Tool.Id <= 0 
                     ? SlotDisplayType.Unload 
                     : (i == 0 
@@ -59,12 +58,73 @@ namespace CNC.Implementation.Controls
                         : SlotDisplayType.Edge);
 
                 edge.ApplyState(displayType, slotLocationType);
+                i++;
             }
         }
+        
+        public void AddEdge(int edgeIndex, TContent edge)
+        {
+            ToolEdges[edgeIndex] = edge;
+    
+            edge.transform.SetParent(transform);
+            edge.UpdateData(CurrentLocation, edgeIndex, Tool);
+            edge.SetSiblingIndex(edgeIndex - 1);
+    
+            UpdateVisual(CurrentLocationType);
+        }
 
-        private void OnDestroy()
+        public void RemoveEdge(int edgeIndex)
+        {
+            if (edgeIndex <= 1) return;
+    
+            if (ToolEdges.Remove(edgeIndex, out var edge))
+            {
+                Destroy(edge.gameObject);
+            }
+    
+            UpdateVisual(CurrentLocationType);
+        }
+
+        public void SetParent(Transform parent)
+        {
+            transform.SetParent(parent);
+        }
+        
+        protected bool TryGetEdge(int edgeIndex, out TContent edge)
+        {
+            var result = ToolEdges.TryGetValue(edgeIndex, out edge);
+            
+            if(!result)
+                Debug.Log($"[{this.GetType().Name}] Edge not found with edgeIndex: {edgeIndex}");
+            
+            return result;
+        }
+
+        public void RemoveEdgesAndReset()
+        {
+            Dispose();
+            Tool = default;
+            foreach (var edge in ToolEdges.Values)
+            {
+                Destroy(edge);
+            }
+            ToolEdges.Clear();
+        }
+        
+        public void Destroy()
+        {
+            RemoveEdgesAndReset();
+            Destroy(gameObject);
+        }
+
+        private void Dispose()
         {
             RemoveListeners();
+        }
+        
+        private void OnDestroy()
+        {
+            Dispose();
         }
     }
 }

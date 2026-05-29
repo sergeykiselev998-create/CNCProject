@@ -1,7 +1,9 @@
 ﻿using CNC.Enums;
 using CNC.Implementation.Config;
+using CNC.Implementation.ToolData;
 using CNC.Interfaces.Config;
 using CNC.Interfaces.Tool;
+using CNC.Utils;
 
 namespace CNC.Implementation.ToolPanel.Repositories
 {
@@ -135,51 +137,76 @@ namespace CNC.Implementation.ToolPanel.Repositories
         {
             string dataStr = _reader.ReadString(sectionKey, _config.GetOffsetEdgeFloatKey(edge), "");
             
-            if (string.IsNullOrEmpty(dataStr)) return;
-            if (!tool.OffsetEdgeData.TryGetValue(edge, out var offsetEdge)) return;
+            if (string.IsNullOrEmpty(dataStr)) 
+                return;
             
             var values = dataStr.Split(',');
-            if (values.Length >= _config.OffsetEdgeFloatValueCount)
+            if (values.Length < _config.OffsetEdgeFloatValueCount) 
+                return;
+            
+            float.TryParse(values[0], out float lengthX);
+            float.TryParse(values[1], out float lengthZ);
+            float.TryParse(values[2], out float radius);
+            float.TryParse(values[3], out float holderAngle);
+            int.TryParse(values[4], out int insertAngle);
+            float.TryParse(values[5], out float insertLength);
+            
+            if (tool.OffsetEdgeData.TryGetValue(edge, out var offsetEdgeInterface))
             {
-                float.TryParse(values[0], out float lengthX);
-                float.TryParse(values[1], out float lengthZ);
-                float.TryParse(values[2], out float radius);
-                float.TryParse(values[3], out float holderAngle);
-                int.TryParse(values[4], out int insertAngle);
-                float.TryParse(values[5], out float insertLength);
-                
-                offsetEdge.LengthX = lengthX;
-                offsetEdge.LengthZ = lengthZ;
-                offsetEdge.Radius = radius;
-                offsetEdge.HolderAngle = holderAngle;
-                offsetEdge.InsertAngle = insertAngle;
-                offsetEdge.InsertLength = insertLength;
+                if (offsetEdgeInterface.TryCast(out TurningOffsetEdgeData offsetEdge))
+                {
+                    offsetEdge.LengthX = lengthX;
+                    offsetEdge.LengthZ = lengthZ;
+                    offsetEdge.Radius = radius;
+                }
+       
+                offsetEdgeInterface.HolderAngle = holderAngle;
+                offsetEdgeInterface.InsertAngle = insertAngle;
+                offsetEdgeInterface.InsertLength = insertLength;
+            }
+            else
+            {
+                // Edge не существует - создаем новый
+                offsetEdgeInterface = new TurningOffsetEdgeData
+                {
+                    LengthX = lengthX,
+                    LengthZ = lengthZ,
+                    Radius = radius,
+                    HolderAngle = holderAngle,
+                    InsertAngle = insertAngle,
+                    InsertLength = insertLength
+                };
+                tool.OffsetEdgeData[edge] = offsetEdgeInterface;
             }
         }
-        
+
         private void LoadWearEdgeData(string sectionKey, int edge, ITurningTool tool)
         {
             string dataStr = _reader.ReadString(sectionKey, _config.GetWearEdgeFloatKey(edge), "");
             
-            if (string.IsNullOrEmpty(dataStr)) return;
-            if (!tool.WearEdgeData.TryGetValue(edge, out var wearEdge)) return;
+            if (string.IsNullOrEmpty(dataStr)) 
+                return;
             
             var values = dataStr.Split(',');
-            if (values.Length >= _config.WearEdgeFloatValueCount)
+            if (values.Length < _config.WearEdgeFloatValueCount) 
+                return;
+            
+            float.TryParse(values[0], out float wearLengthX);
+            float.TryParse(values[1], out float wearLengthZ);
+            float.TryParse(values[2], out float wearRadius);
+            float.TryParse(values[3], out float toolLife);
+            float.TryParse(values[4], out float toolNominalLife);
+            float.TryParse(values[5], out float toolLimitLife);
+            float.TryParse(values[6], out float toolQuantity);
+            float.TryParse(values[7], out float toolNominalQuantity);
+            float.TryParse(values[8], out float toolLimitQuantity);
+            float.TryParse(values[9], out float toolWear);
+            float.TryParse(values[10], out float toolNominalWear);
+            float.TryParse(values[11], out float toolLimitWear);
+            
+            if (tool.WearEdgeData.TryGetValue(edge, out var wearEdge))
             {
-                float.TryParse(values[0], out float wearLengthX);
-                float.TryParse(values[1], out float wearLengthZ);
-                float.TryParse(values[2], out float wearRadius);
-                float.TryParse(values[3], out float toolLife);
-                float.TryParse(values[4], out float toolNominalLife);
-                float.TryParse(values[5], out float toolLimitLife);
-                float.TryParse(values[6], out float toolQuantity);
-                float.TryParse(values[7], out float toolNominalQuantity);
-                float.TryParse(values[8], out float toolLimitQuantity);
-                float.TryParse(values[9], out float toolWear);
-                float.TryParse(values[10], out float toolNominalWear);
-                float.TryParse(values[11], out float toolLimitWear);
-                
+                // WearEdge существует - обновляем все поля
                 wearEdge.WearLengthX = wearLengthX;
                 wearEdge.WearLengthZ = wearLengthZ;
                 wearEdge.WearRadius = wearRadius;
@@ -192,6 +219,26 @@ namespace CNC.Implementation.ToolPanel.Repositories
                 wearEdge.ToolWear = toolWear;
                 wearEdge.ToolNominalWear = toolNominalWear;
                 wearEdge.ToolLimitWear = toolLimitWear;
+            }
+            else
+            {
+                // WearEdge не существует - создаем новый
+                wearEdge = new TurningWearEdgeData
+                {
+                    WearLengthX = wearLengthX,
+                    WearLengthZ = wearLengthZ,
+                    WearRadius = wearRadius,
+                    ToolLife = toolLife,
+                    ToolNominalLife = toolNominalLife,
+                    ToolLimitLife = toolLimitLife,
+                    ToolQuantity = toolQuantity,
+                    ToolNominalQuantity = toolNominalQuantity,
+                    ToolLimitQuantity = toolLimitQuantity,
+                    ToolWear = toolWear,
+                    ToolNominalWear = toolNominalWear,
+                    ToolLimitWear = toolLimitWear
+                };
+                tool.WearEdgeData[edge] = wearEdge;
             }
         }
     }

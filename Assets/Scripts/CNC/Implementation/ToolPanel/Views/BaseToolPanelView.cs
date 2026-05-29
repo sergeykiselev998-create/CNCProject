@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CNC.Implementation.Controls;
+﻿using System.Collections.Generic;
 using CNC.Implementation.Factories;
 using CNC.Enums;
 using CNC.Interfaces.Tool;
@@ -9,6 +6,7 @@ using CNC.Interfaces.ToolPanel;
 using CNC.Interfaces.Views;
 using Reflex.Attributes;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace CNC.Implementation.ToolPanel.Views
 {
@@ -24,10 +22,12 @@ namespace CNC.Implementation.ToolPanel.Views
 
         private ISlotControl<TContent, TTool> Spindle { get; set; }
         private Dictionary<int, ISlotControl<TContent, TTool>> Magazine { get; } = new();
-        private List<ISlotControl<TContent, TTool>> Buffer { get; } = new();
+        private Dictionary<int, ISlotControl<TContent, TTool>>  Buffer { get; } = new();
         
         [Inject]
         public SlotFactory<TControl, TContent, TTool> Factory { get; set; }
+
+        //________Add_______//
 
         public void AddToolHolder(int location, TTool tool)
         {
@@ -44,9 +44,75 @@ namespace CNC.Implementation.ToolPanel.Views
         public void AddBuffer(int location, TTool tool)
         {
             var toolControl = Create(location, tool, m_BufferContainer.transform, SlotLocationType.Buffer);
-            
-            Buffer.Add(toolControl);
+            Buffer.Add(tool.Id, toolControl);
         }
+
+        //________Unload_______//
+
+        public void UnloadToolHolder(int location, TTool emptyTool)
+        {
+            if (Spindle == null)
+                return;
+            
+            ReinitializeControl(Spindle, location, emptyTool, SlotLocationType.Spindle);
+        }
+        
+        public void UnloadMagazine(int location, TTool emptyTool)
+        {
+            if (!Magazine.TryGetValue(location, out var slotControl))
+                return;
+            
+            ReinitializeControl(slotControl, location, emptyTool, SlotLocationType.Magazine);
+        }
+
+        public void UnloadBuffer(int toolId)
+        {
+            if (!Buffer.TryGetValue(toolId, out var slotControl))
+                return;
+
+            RemoveListeners(slotControl);
+            slotControl.Destroy();
+            Buffer.Remove(toolId);
+        }
+
+        //________Load_______//
+        
+        public void LoadToolHolder(int location, TTool tool)
+        {
+            if (Spindle == null)
+                return;
+            
+            ReinitializeControl(Spindle, location, tool, SlotLocationType.Spindle);
+        }
+
+        public void LoadMagazine(int location, TTool tool)
+        {
+            if (!Magazine.TryGetValue(location, out var slotControl))
+                return;
+            
+            ReinitializeControl(slotControl, location, tool, SlotLocationType.Magazine);
+        }
+
+        public void LoadBuffer(int location, TTool tool)
+        {
+            if (Buffer.ContainsKey(tool.Id))
+                return;
+            
+            var toolControl = Create(location, tool, m_BufferContainer.transform, SlotLocationType.Buffer);
+            Buffer.Add(tool.Id, toolControl);
+        }
+        
+        //AddEdge
+        public void AddEdge(int id)
+        {
+            if (!TryFindControlById(id, out var control))
+                return;
+            
+                    // control.AddEdge();
+        }
+        
+
+        //________Protected_______//
         
         protected bool TryFindControlById(int id, out ISlotControl<TContent, TTool> control)
         {
@@ -59,24 +125,13 @@ namespace CNC.Implementation.ToolPanel.Views
             if (Magazine.TryGetValue(id, out control))
                 return true;
 
-            control = Buffer.FirstOrDefault(c => c.Id == id);
+            if (Buffer.TryGetValue(id, out control)) 
+                return true;
             
-            
-            return control != null;
+            control = null;
+            return false;
         }
 
-        private ISlotControl<TContent, TTool> Create(int location, TTool tool, Transform parent, SlotLocationType locationType)
-        {
-            var toolControl =  Factory.CreateSlotControl();
-            var toolEdges = Factory.CreateEdges(tool);
-            
-            toolControl.SetParent(parent);
-            toolControl.Initialize(location, tool, toolEdges);
-            toolControl.UpdateVisual(locationType);
-            AddListeners(toolControl);
-            return toolControl;
-        }
-        
         protected virtual bool TryCastControl(ISlotControl<TContent, TTool> slotControl, out TControl control)
         {
             control = slotControl as TControl;
@@ -89,7 +144,33 @@ namespace CNC.Implementation.ToolPanel.Views
 
             return true;
         }
+        
+        //________Private_______//
+        
+        private void ReinitializeControl(ISlotControl<TContent, TTool> control, int location, TTool tool, SlotLocationType locationType)
+        {
+            control.RemoveEdgesAndReset();
+    
+            var newEdges = Factory.CreateEdges(tool);
+    
+            control.Initialize(location, tool, newEdges);
+            control.UpdateVisual(locationType);
+        }
+        
+        private ISlotControl<TContent, TTool> Create(int location, TTool tool, Transform parent, SlotLocationType locationType)
+        {
+            var toolControl =  Factory.CreateSlotControl();
+            var toolEdges = Factory.CreateEdges(tool);
+            
+            toolControl.SetParent(parent);
+            toolControl.Initialize(location, tool, toolEdges);
+            toolControl.UpdateVisual(locationType);
+            AddListeners(toolControl);
+            return toolControl;
+        }
 
+        //________Abstract_______//
+        
         protected abstract void AddListeners(ISlotControl<TContent, TTool> slotControl);
 
         protected abstract void RemoveListeners(ISlotControl<TContent, TTool> slotControl);

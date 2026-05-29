@@ -24,12 +24,12 @@ namespace CNC.Implementation.Tool
         public bool Coolant2 { get; set; }
         public SpindleDirection SpindleDirection { get; set; }
         public HolderDirection HolderDirection { get; set; }
-        public Dictionary<int, ITurningOffsetEdgeData> OffsetEdgeData { get; }
+        public SortedDictionary<int, ITurningOffsetEdgeData> OffsetEdgeData { get; }
         
         //Wear
         public bool ToolDisabled { get; set; }
         public TCWParameter TcwParameter { get; set; }
-        public Dictionary<int, ITurningWearEdgeData> WearEdgeData { get; }
+        public SortedDictionary<int, ITurningWearEdgeData> WearEdgeData { get; }
         
         //Magazine
         public bool MagazineLocationDisabled { get; set; }
@@ -45,12 +45,12 @@ namespace CNC.Implementation.Tool
             CutterType = cutterType;
      
             
-            OffsetEdgeData = new Dictionary<int, ITurningOffsetEdgeData>
+            OffsetEdgeData = new SortedDictionary<int, ITurningOffsetEdgeData>
             {
                 [1] = new TurningOffsetEdgeData()
             };
             
-            WearEdgeData = new Dictionary<int, ITurningWearEdgeData>
+            WearEdgeData = new SortedDictionary<int, ITurningWearEdgeData>
             {
                 [1] = new TurningWearEdgeData()
             };

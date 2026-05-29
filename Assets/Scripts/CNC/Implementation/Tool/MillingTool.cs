@@ -5,6 +5,7 @@ using CNC.Enums;
 using CNC.Implementation.ToolData;
 using CNC.Interfaces.Tool;
 using CNC.Interfaces.Tool.MillingData;
+using UnityEngine;
 
 namespace CNC.Implementation.Tool
 {
@@ -23,12 +24,12 @@ namespace CNC.Implementation.Tool
         public bool Coolant1 { get;set;  }
         public bool Coolant2 { get; set; }
         public SpindleDirection SpindleDirection { get; set; }
-        public Dictionary<int, IMillingOffsetEdgeData> OffsetEdgeData { get; }
+        public SortedDictionary<int, IMillingOffsetEdgeData> OffsetEdgeData { get; }
 
         //Wear
         public bool ToolDisabled { get; set; }
         public TCWParameter TcwParameter { get; set; }
-        public Dictionary<int, IMillingWearEdgeData> WearEdgeData { get; }
+        public SortedDictionary<int, IMillingWearEdgeData> WearEdgeData { get; }
         
         //Magazine
         public bool MagazineLocationDisabled { get; set; }
@@ -44,15 +45,45 @@ namespace CNC.Implementation.Tool
             ToolName = toolName;
             CutterType = cutterType;
 
-            OffsetEdgeData = new Dictionary<int, IMillingOffsetEdgeData>
+            OffsetEdgeData = new SortedDictionary<int, IMillingOffsetEdgeData>
             {
                 [1] = new MillingOffsetEdgeData(0, diameter)
             };
             
-            WearEdgeData = new Dictionary<int, IMillingWearEdgeData>
+            WearEdgeData = new SortedDictionary<int, IMillingWearEdgeData>
             {
                 [1] = new MillingWearEdgeData()
             };
+        }
+
+        public void AddEdge(int triggeredEdgeIndex)
+        {
+            if (!OffsetEdgeData.ContainsKey(triggeredEdgeIndex))
+            {
+                Debug.Log($"[{this.GetType().Name}] Edge {triggeredEdgeIndex} not found");
+                return;
+            }
+
+            int newEdgeIndex = -1;
+            int maxExistingIndex = OffsetEdgeData.Keys.Max();
+    
+            for (int i = triggeredEdgeIndex + 1; i <= maxExistingIndex + 1; i++)
+            {
+                if (!OffsetEdgeData.ContainsKey(i))
+                {
+                    newEdgeIndex = i;
+                    break;
+                }
+            }
+
+            if (newEdgeIndex == -1)
+            {
+                Debug.Log($"[{this.GetType().Name}] Failed to find a free index for new edge");
+                return;
+            }
+            
+            OffsetEdgeData[newEdgeIndex] = OffsetEdgeData[triggeredEdgeIndex].Clone();
+            WearEdgeData[newEdgeIndex] = WearEdgeData[triggeredEdgeIndex].Clone();
         }
     }
 }

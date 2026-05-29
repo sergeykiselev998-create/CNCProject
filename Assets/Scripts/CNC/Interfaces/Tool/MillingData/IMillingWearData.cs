@@ -7,6 +7,6 @@ namespace CNC.Interfaces.Tool.MillingData
     {
         bool ToolDisabled { get; set; }
         TCWParameter TcwParameter { get; set; }
-        Dictionary<int, IMillingWearEdgeData> WearEdgeData { get; }
+        SortedDictionary<int, IMillingWearEdgeData> WearEdgeData { get; }
     }
 }

@@ -115,7 +115,7 @@ namespace CNC.Implementation.Magazine
 
         public T GetEmptyTool()
         {
-            return ToolRepository.CreateEmptyTool();
+            return ToolRepository.EmptyTool;
         }
 
         /// <summary>

@@ -30,5 +30,21 @@ namespace CNC.Implementation.Magazine
             ThirdView.AddMagazine(location, tool);
             FourthView.AddMagazine(location, tool);
         }
+        
+        public void LoadMagazine(int location, TTool tool)
+        {
+            MainView.LoadMagazine(location, tool);
+            OffsetView.LoadMagazine(location, tool);
+            ThirdView.LoadMagazine(location, tool);
+            FourthView.LoadMagazine(location, tool);
+        }
+        
+        public void UnloadMagazine(int location, TTool emptyTool)
+        {
+            MainView.UnloadMagazine(location, emptyTool);
+            OffsetView.UnloadMagazine(location, emptyTool);
+            ThirdView.UnloadMagazine(location, emptyTool);
+            FourthView.UnloadMagazine(location, emptyTool);
+        }
     }
 }
